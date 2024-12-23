@@ -7,18 +7,18 @@ public class StartManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        bestPointText.text = "BestPoint";
-        if(GameInstance.instance.playerPoint != 0)
-        {
-            bestPointText.text = "BestPoint : " + GameInstance.instance.playerPoint.ToString();
-        }
+      
+       
+         
+        
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        var best = GameInstance.instance.playerRanking[0];
+        bestPointText.text = $"BestPoint \n {best.playerName} : {best.score} ";
     }
 
     public void GameStart()

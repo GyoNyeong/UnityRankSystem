@@ -5,6 +5,9 @@ using UnityEngine;
 public class GameInstance : MonoBehaviour
 {
     public static GameInstance instance;
+    private TCPClient clientSocket;
+    private RankDataQue rankDataque;
+
 
     public string playerName;
     public int playerPoint;
@@ -18,15 +21,26 @@ public class GameInstance : MonoBehaviour
             Destroy(gameObject);
         }
         instance = this;
+
+        clientSocket = TCPClient.instance ?? new TCPClient();
+        rankDataque = RankDataQue.GetInstance;
+        clientSocket.ConnectToServer();
+        clientSocket.StartThreads();
         DontDestroyOnLoad(gameObject);
 
         LoadData();
+        RequestRanking();
     }
 
     // Update is called once per frame
     void Update()
     {
-        TCPClient.instance.ReceiveData();
+        string rankData = rankDataque.GetData();
+        if (!string.IsNullOrEmpty(rankData))
+        {
+            SaveRankingData(rankData);
+            //Debug.Log("Fetched rank data: " + rankData);
+        }
     }
 
     [System.Serializable]
@@ -59,7 +73,7 @@ public class GameInstance : MonoBehaviour
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
         Debug.Log("SavedPoint : " + playerPoint);
-        TCPClient.instance.SendPlayerData(json);
+        clientSocket.SendPlayerData(json);
 
     }
 
@@ -82,7 +96,7 @@ public class GameInstance : MonoBehaviour
     {
         // JSON 형식으로 요청 보내기
         string requestJson = "{\"action\": \"getRanking\"}";
-        TCPClient.instance.SendPlayerData(requestJson);   
+        clientSocket.SendPlayerData(requestJson);
     }
 
     public void SaveRankingData(string jsonResponse)
@@ -104,5 +118,10 @@ public class GameInstance : MonoBehaviour
         {
             Debug.Log("Player: " + rank.playerName + ", Score: " + rank.score);
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        clientSocket.Quit();
     }
 }

@@ -13,7 +13,7 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
-    public Text BestScoreText;
+
     public GameObject GameOverText;
     public string playerName; 
    
@@ -44,8 +44,6 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
-
-        BestScoreText.text = "BestScore : " + playerName + " : " + GameInstance.instance.playerPoint;
     }
 
     private void Update()
