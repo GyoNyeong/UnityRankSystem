@@ -26,7 +26,6 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //GameInstance.instance.LoadData();
 
         playerName = GameInstance.instance.playerName;
 
@@ -86,10 +85,6 @@ public class MainManager : MonoBehaviour
         m_GameOver = true;
         GameOverText.SetActive(true);
 
-        //GameInstance.instance.playerPoint = m_Points;
-
-
-        //������ ������ ���� (�Ŀ� ���� ����� Json���� ��밡������ �����غ� ��)
         GameInstance.instance.SaveData(playerName, m_Points);
         Debug.Log("GameOver");
     }
