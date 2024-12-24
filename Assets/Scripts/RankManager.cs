@@ -10,7 +10,6 @@ public class RankManager : MonoBehaviour
     void Start()
     {
         UpdateRankingUI();
-  
     }
 
     // Update is called once per frame

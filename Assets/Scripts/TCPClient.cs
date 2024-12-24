@@ -9,11 +9,11 @@ public class TCPClient
 {
     public static TCPClient instance;
     //
-
     private Thread receiveThread;
     private TcpClient tcpClient;
     private StreamReader reader;
     private StreamWriter writer;
+    private CancellationTokenSource cancellationTokenSource;
 
     public string serverAddress = "127.0.0.1";
     public int port = 3000;
@@ -29,7 +29,7 @@ public class TCPClient
     }
     public void ConnectToServer()
     {
-        
+ 
         try
         {
             if (tcpClient == null || !tcpClient.Connected)
@@ -93,8 +93,8 @@ public class TCPClient
                 reader.Close();
                 writer.Close();
                 tcpClient.Close();
-                receiveThread.Abort();
-            }
+                cancellationTokenSource.Cancel();
+            } 
         }
         catch (Exception e)
         {
