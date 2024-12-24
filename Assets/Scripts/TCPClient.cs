@@ -15,8 +15,6 @@ public class TCPClient
     private StreamReader reader;
     private StreamWriter writer;
 
-    public bool isReceivingData = true; // 데이터를 한 번에 하나씩만 받도록 플래그 추가
-
     public string serverAddress = "127.0.0.1";
     public int port = 3000;
 

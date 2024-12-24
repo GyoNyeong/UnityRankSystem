@@ -86,6 +86,5 @@ public class MainManager : MonoBehaviour
         GameOverText.SetActive(true);
 
         GameInstance.instance.SaveData(playerName, m_Points);
-        Debug.Log("GameOver");
     }
 }

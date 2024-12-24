@@ -7,10 +7,6 @@ public class StartManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-      
-       
-         
-        
         
     }
 
@@ -34,7 +30,7 @@ public class StartManager : MonoBehaviour
 
     public void QuitGame()
     {
-   
+        //에디터 또는 퍼빌리싱된 실행파일 종료
         #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
         #else
