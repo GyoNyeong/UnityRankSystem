@@ -39,12 +39,11 @@ public class GameInstance : MonoBehaviour
         if (!string.IsNullOrEmpty(rankData))
         {
             SaveRankingData(rankData);
-            //Debug.Log("Fetched rank data: " + rankData);
         }
     }
 
     [System.Serializable]
-    public class Data
+    private class Data
     {
         public string playerName;
         public int point;

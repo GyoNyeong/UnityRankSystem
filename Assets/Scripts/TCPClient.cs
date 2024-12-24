@@ -34,11 +34,13 @@ public class TCPClient
         
         try
         {
-            tcpClient = new TcpClient(serverAddress, port);
-            writer = new StreamWriter(tcpClient.GetStream());
-            reader = new StreamReader(tcpClient.GetStream());
-            Debug.Log("Successfully connected to the server");
-
+            if (tcpClient == null || !tcpClient.Connected)
+            {
+                tcpClient = new TcpClient(serverAddress, port);
+                writer = new StreamWriter(tcpClient.GetStream());
+                reader = new StreamReader(tcpClient.GetStream());
+                Debug.Log("Successfully connected to the server");
+            }
         }
         catch (System.Exception e)
         {
@@ -51,7 +53,7 @@ public class TCPClient
     {
         if (tcpClient == null || !tcpClient.Connected)
         {
-            Debug.Log("Not connected to the server. Trying to reconnect...");
+            Debug.Log("Data Send Failed : Not connected to the server.");
             ConnectToServer();
         }
 
@@ -61,23 +63,25 @@ public class TCPClient
             writer.Flush();
             Debug.Log("Transfer jsonMassage: " + jsonMessage);
         }
-        else
-        {
-            
-        }
     }
 
     public void ReceiveDataThread()
     {
-        if (reader != null)
+        try
         {
-            Debug.Log("데이터 전송 대기중");
-            string jsonMassage = reader.ReadLine();
-            Debug.Log("데이터 전송 확인");
-            if (!string.IsNullOrEmpty(jsonMassage))
+            if (reader != null)
             {
-                RankDataQue.GetInstance.PushData(jsonMassage);
+                string jsonMassage = reader.ReadLine();
+                Debug.Log("데이터 전송 확인");
+                if (!string.IsNullOrEmpty(jsonMassage))
+                {
+                    RankDataQue.GetInstance.PushData(jsonMassage);
+                }
             }
+        }
+        catch(Exception e)
+        {
+
         }
     }
 
@@ -91,13 +95,12 @@ public class TCPClient
                 reader.Close();
                 writer.Close();
                 tcpClient.Close();
-                receiveThread.Interrupt();
-                Debug.Log("Connection closed successfully.");
+                receiveThread.Abort();
             }
         }
         catch (Exception e)
         {
-            Debug.LogError("Error while closing connection: " + e.Message);
+
         }
     }
 }

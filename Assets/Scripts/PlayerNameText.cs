@@ -18,7 +18,10 @@ public class PlayerNameText : MonoBehaviour
 
     void SetPlayerName(string playerName)
     {
+        if (playerNameText.text == "Name")
+        {
+            playerNameText.text = "UnknownPlayer";
+        }
         GameInstance.instance.playerName = playerName;
-
     }
 }
