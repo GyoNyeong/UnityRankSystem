@@ -28,7 +28,6 @@ public class GameInstance : MonoBehaviour
         clientSocket.StartThreads();
         DontDestroyOnLoad(gameObject);
 
-        LoadData();
         RequestRanking();
     }
 
@@ -60,7 +59,7 @@ public class GameInstance : MonoBehaviour
     [System.Serializable]
     public class RankingResponse
     {
-        public string status; // 서버의 응답 상태
+
         public RankData[] ranking; // 랭킹 데이터
     }
 
