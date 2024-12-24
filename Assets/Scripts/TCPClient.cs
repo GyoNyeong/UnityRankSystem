@@ -95,6 +95,7 @@ public class TCPClient
                 writer.Close();
                 tcpClient.Close();
                 cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();
             }
         }
         catch (Exception e)
