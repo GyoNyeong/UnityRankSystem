@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class GameInstance : MonoBehaviour
@@ -7,7 +9,6 @@ public class GameInstance : MonoBehaviour
     public static GameInstance instance;
     private TCPClient clientSocket;
     private RankDataQue rankDataque;
-
 
     public string playerName;
     public int playerPoint;
@@ -59,8 +60,7 @@ public class GameInstance : MonoBehaviour
     [System.Serializable]
     public class RankingResponse
     {
-
-        public RankData[] ranking; // 랭킹 데이터
+        public RankData[] ranking;  // 여전히 배열로 사용합니다.
     }
 
     public void SaveData(string playerNameData, int score)
@@ -99,22 +99,29 @@ public class GameInstance : MonoBehaviour
 
     public void SaveRankingData(string jsonResponse)
     {
-        Debug.Log("랭킹데이터세이브진입");
-        RankingResponse response = JsonUtility.FromJson<RankingResponse>(jsonResponse);
-        playerRanking.Clear();  // 기존 랭킹 데이터를 지운 후
-
-        if (response != null && response.ranking != null)
+        try
         {
+            // JSON 파싱
+            RankingResponse response = JsonUtility.FromJson<RankingResponse>(jsonResponse);
+
+            if (response != null && response.ranking != null)
+            {
+                playerRanking.Clear();  // 기존 랭킹 데이터 지우기
+                foreach (var rank in response.ranking)
+                {
+                    playerRanking.Add(rank); // 랭킹 데이터를 playerRanking 리스트에 추가
+                }
+            }
+
+            // 랭킹 데이터를 확인하기 위한 디버그 로그
             foreach (var rank in response.ranking)
             {
-                playerRanking.Add(rank); // 랭킹 데이터를 playerRanking 리스트에 추가
+                Debug.Log("Player: " + rank.playerName + ", Score: " + rank.score);
             }
         }
-
-        // 랭킹 데이터를 확인하기 위한 디버그 로그
-        foreach (var rank in playerRanking)
+        catch (Exception ex)
         {
-            Debug.Log("Player: " + rank.playerName + ", Score: " + rank.score);
+            Debug.LogError("Error while parsing ranking data: " + ex.Message);
         }
     }
 
