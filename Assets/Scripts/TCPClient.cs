@@ -49,70 +49,70 @@ public class TCPClient
 
     }
 
-    //public void SendPlayerData(string jsonMessage)
-    //{
-    //    if (tcpClient == null || !tcpClient.Connected)
-    //    {
-    //        Debug.Log("Data Send Failed : Not connected to the server.");
-    //        ConnectToServer();
-    //    }
-
-    //    if (tcpClient.Connected)
-    //    {
-    //        //writer.WriteLine(jsonMessage);
-    //        //writer.Flush();
-    //        //Debug.Log("Transfer jsonMassage: " + jsonMessage);
-
-    //        ushort length = (ushort)jsonMessage.Length;
-    //        byte[] lengthBytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)length));
-    //        tcpClient.GetStream().Write(lengthBytes, 0, lengthBytes.Length);
-
-    //        // 그 뒤에 JSON 데이터를 보냄
-    //        byte[] jsonData = System.Text.Encoding.UTF8.GetBytes(jsonMessage);
-    //        tcpClient.GetStream().Write(jsonData, 0, jsonData.Length);
-    //        Debug.Log("SendMessage : " + jsonMessage);
-    //        Debug.Log("SendData : " + BitConverter.ToString(jsonData));
-    //    }
-    //}
     public void SendPlayerData(string jsonMessage)
     {
-        // 연결이 끊어졌거나, writer/reader가 null이라면 재연결 시도
-        if (tcpClient == null || !tcpClient.Connected || writer == null || reader == null)
+        if (tcpClient == null || !tcpClient.Connected)
         {
-            Debug.Log("Data Send Failed: Not connected to the server.");
+            Debug.Log("Data Send Failed : Not connected to the server.");
             ConnectToServer();
         }
 
-        // 재연결 후에도 연결이 되지 않았다면 에러 처리
         if (tcpClient.Connected)
         {
-            try
-            {
-                // 보내는 데이터의 길이를 먼저 보냄
-                ushort length = (ushort)jsonMessage.Length;
-                byte[] lengthBytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)length));
-                tcpClient.GetStream().Write(lengthBytes, 0, lengthBytes.Length);
+            //writer.WriteLine(jsonMessage);
+            //writer.Flush();
+            //Debug.Log("Transfer jsonMassage: " + jsonMessage);
 
-                // JSON 데이터를 보냄
-                byte[] jsonData = System.Text.Encoding.UTF8.GetBytes(jsonMessage);
-                tcpClient.GetStream().Write(jsonData, 0, jsonData.Length);
-                Debug.Log("SendMessage : " + jsonMessage);
-                Debug.Log("SendData : " + BitConverter.ToString(jsonData));
-            }
-            catch (IOException e)
-            {
-                Debug.LogError("IOException: Unable to write data to the transport connection. " + e.Message);
-                // 연결이 끊어졌을 경우 재연결 시도
-                ConnectToServer();
-            }
-            catch (SocketException e)
-            {
-                Debug.LogError("SocketException: " + e.Message);
-                // 연결이 끊어졌을 경우 재연결 시도
-                ConnectToServer();
-            }
+            ushort length = (ushort)jsonMessage.Length;
+            byte[] lengthBytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)length));
+            tcpClient.GetStream().Write(lengthBytes, 0, lengthBytes.Length);
+
+            // 그 뒤에 JSON 데이터를 보냄
+            byte[] jsonData = System.Text.Encoding.UTF8.GetBytes(jsonMessage);
+            tcpClient.GetStream().Write(jsonData, 0, jsonData.Length);
+            Debug.Log("SendMessage : " + jsonMessage);
+            Debug.Log("SendData : " + BitConverter.ToString(jsonData));
         }
     }
+    //public void SendPlayerData(string jsonMessage)
+    //{
+    //    // 연결이 끊어졌거나, writer/reader가 null이라면 재연결 시도
+    //    if (tcpClient == null || !tcpClient.Connected || writer == null || reader == null)
+    //    {
+    //        Debug.Log("Data Send Failed: Not connected to the server.");
+    //        ConnectToServer();
+    //    }
+
+    //    // 재연결 후에도 연결이 되지 않았다면 에러 처리
+    //    if (tcpClient.Connected)
+    //    {
+    //        try
+    //        {
+    //            // 보내는 데이터의 길이를 먼저 보냄
+    //            ushort length = (ushort)jsonMessage.Length;
+    //            byte[] lengthBytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)length));
+    //            tcpClient.GetStream().Write(lengthBytes, 0, lengthBytes.Length);
+
+    //            // JSON 데이터를 보냄
+    //            byte[] jsonData = System.Text.Encoding.UTF8.GetBytes(jsonMessage);
+    //            tcpClient.GetStream().Write(jsonData, 0, jsonData.Length);
+    //            Debug.Log("SendMessage : " + jsonMessage);
+    //            Debug.Log("SendData : " + BitConverter.ToString(jsonData));
+    //        }
+    //        catch (IOException e)
+    //        {
+    //            Debug.LogError("IOException: Unable to write data to the transport connection. " + e.Message);
+    //            // 연결이 끊어졌을 경우 재연결 시도
+    //            ConnectToServer();
+    //        }
+    //        catch (SocketException e)
+    //        {
+    //            Debug.LogError("SocketException: " + e.Message);
+    //            // 연결이 끊어졌을 경우 재연결 시도
+    //            ConnectToServer();
+    //        }
+    //    }
+    //}
     public void ReceiveDataThread()
     {
         //try
